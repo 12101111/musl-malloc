@@ -1,3 +1,7 @@
+
+#if defined(__AVX2__)
+// implemented as memcpy
+#else
 .global memmove
 .type memmove,@function
 memmove:
@@ -14,3 +18,4 @@ memmove:
 	cld
 	lea 1(%rdi),%rax
 	ret
+#endif
