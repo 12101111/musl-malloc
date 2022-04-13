@@ -7,6 +7,8 @@
 #include "atomic.h"
 #include "libc.h"
 
+extern hidden int __malloc_process_init();
+
 static void dummy(void) {}
 weak_alias(dummy, _init);
 
@@ -58,6 +60,8 @@ void __init_libc(char **envp, char *pn)
 
 static void libc_start_init(void)
 {
+	/* Initialize pre process structure of malloc implementation */
+	if (__malloc_process_init() < 0) a_crash();
 	_init();
 	uintptr_t a = (uintptr_t)&__init_array_start;
 	for (; a<(uintptr_t)&__init_array_end; a+=sizeof(void(*)()))

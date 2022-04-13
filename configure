@@ -349,6 +349,7 @@ esac
 #
 tryflag CFLAGS_C99FSE -std=c99
 tryflag CFLAGS_C99FSE -nostdinc
+tryflag CFLAGS_C99FSE "-isystem $($CC -print-file-name=include)"
 tryflag CFLAGS_C99FSE -ffreestanding \
 || tryflag CFLAGS_C99FSE -fno-builtin
 tryflag CFLAGS_C99FSE -fexcess-precision=standard \
