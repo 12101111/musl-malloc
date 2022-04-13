@@ -116,3 +116,8 @@ static void *default_malloc(size_t n)
 }
 
 weak_alias(default_malloc, malloc);
+
+static void dummy(void) {}
+weak_alias(dummy, __malloc_process_init);
+weak_alias(dummy, __malloc_thread_init);
+weak_alias(dummy, __malloc_thread_finalize);

@@ -7,6 +7,9 @@
 #include <string.h>
 #include <stddef.h>
 
+hidden void __malloc_thread_init();
+hidden void __malloc_thread_finalize();
+
 static void dummy_0()
 {
 }
@@ -68,6 +71,8 @@ _Noreturn void __pthread_exit(void *result)
 	}
 
 	__pthread_tsd_run_dtors();
+
+	__malloc_thread_finalize();
 
 	__block_app_sigs(&set);
 
@@ -204,6 +209,7 @@ static int start(void *p)
 		}
 	}
 	__syscall(SYS_rt_sigprocmask, SIG_SETMASK, &args->sig_mask, 0, _NSIG/8);
+	__malloc_thread_init();
 	__pthread_exit(args->start_func(args->start_arg));
 	return 0;
 }
@@ -212,6 +218,7 @@ static int start_c11(void *p)
 {
 	struct start_args *args = p;
 	int (*start)(void*) = (int(*)(void*)) args->start_func;
+	__malloc_thread_init();
 	__pthread_exit((void *)(uintptr_t)start(args->start_arg));
 	return 0;
 }
